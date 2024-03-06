@@ -43,10 +43,7 @@ wss.on('connection', (ws) => {
         break;
       case 'closeBlock': 
         closeBlock(data.isMentor);
-        break;
-      case 'save': // changes code in database
-        handleSaveEvent(data);
-        break;   
+        break; 
       default:
         break;
     }
@@ -88,19 +85,6 @@ function closeBlock(isMentor){
   if(isMentor)
     mentorsBlockIndex = -1;
     console.log("mentor disconnected")
-}
-
-function handleSaveEvent(data) {
-  const newCode = data.code
-  const blockId = data.id
-  const updateQuery = 'UPDATE moveo SET code = ? WHERE id = ?';
-  db.query(updateQuery, [newCode, blockId], (err, data) => {
-    if (err) {
-      console.error(err);
-      throw new Error('Failed to update code in the database');
-    }
-    console.log('Code updated in the database');
-  })
 }
 
 function startServer() {
