@@ -12,7 +12,7 @@ export const manageWS = wss => {
             joinCodeBlock(ws, data.index);
             break;
         case 'changeCode':
-            changeCode(wss, data.newCode);
+            changeCode(wss, data.index, data.newCode);
             break;
         case 'closeBlock': 
             closeBlock(data.isMentor);
@@ -38,9 +38,9 @@ async function joinCodeBlock(ws, index) {
   }
 }
   
-function changeCode(wss, newCode) {
+function changeCode(wss, index, newCode) {
   wss.clients.forEach(client => {
-    client.send(JSON.stringify({ type: 'code', code: newCode }));
+    client.send(JSON.stringify({ type: 'code', index: index, code: newCode }));
   });
 }
 
