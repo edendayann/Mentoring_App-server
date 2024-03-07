@@ -30,7 +30,7 @@ export const manageWS = wss => {
 
 async function joinCodeBlock(ws, index) {
   console.log('Client joined block number:', index);
-  if (mentorsBlockIndex === index)
+  if (mentorsBlockIndex == index)
     ws.send(JSON.stringify({ type: 'mentor', index: index, data: 'false' }));
   else{
     mentorsBlockIndex = index;

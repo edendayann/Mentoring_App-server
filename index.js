@@ -19,13 +19,9 @@ function startServer() {
   connectToDb();
   manageDB(app);
   manageWS(wss);
-  const SOCKET_PORT = process.env.SOCKET_PORT || 3001;
-  server.listen(SOCKET_PORT , () => {
-    console.log("server listening at port " + SOCKET_PORT);
-  });
-  const APP_PORT = process.env.APP_PORT || 3002;
-  app.listen(APP_PORT, () => {
-    console.log("app listening at port " + APP_PORT);
+  const PORT = process.env.PORT || 3001; // Use a common environment variable like PORT
+  server.listen(PORT, () => {
+    console.log(`Server listening at port ${PORT}`);
   });
 }
 
