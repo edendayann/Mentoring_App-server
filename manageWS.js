@@ -31,10 +31,10 @@ export const manageWS = wss => {
 async function joinCodeBlock(ws, index) {
   console.log('Client joined block number:', index);
   if (mentorsBlockIndex === index)
-    ws.send(JSON.stringify({ type: 'mentor', data: 'false' }));
+    ws.send(JSON.stringify({ type: 'mentor', index: index, data: 'false' }));
   else{
     mentorsBlockIndex = index;
-    ws.send(JSON.stringify({ type: 'mentor', data: 'true' }));
+    ws.send(JSON.stringify({ type: 'mentor', index: index, data: 'true' }));
   }
 }
   
@@ -44,11 +44,11 @@ function changeCode(wss, index, newCode) {
   });
 }
 
-function closeBlock(isMentor){
+function closeBlock(index, isMentor){
   if(isMentor)
     mentorsBlockIndex = -1;
     wss.clients.forEach(client => {
-      client.send(JSON.stringify({ type: 'mentor', data: 'false' }));
+      client.send(JSON.stringify({ type: 'mentor', index: index, data: 'false' }));
     });
     console.log("mentor disconnected")
 }
