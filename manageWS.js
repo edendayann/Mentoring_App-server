@@ -1,5 +1,4 @@
-//assuming only one mentor for the project. can have an array/map for multiple
-let mentorsBlockIndex = -1;
+let mentorsArray = []
 
 export const manageWS = wss => {
 
@@ -14,8 +13,8 @@ export const manageWS = wss => {
         case 'changeCode':
             changeCode(wss, data.index, data.newCode);
             break;
-        case 'closeBlock': 
-            closeBlock(data.isMentor);
+        case 'closeMentor': 
+            closeMentor(data.index);
             break; 
         default:
             break;
@@ -30,11 +29,12 @@ export const manageWS = wss => {
 
 async function joinCodeBlock(ws, index) {
   console.log('Client joined block number:', index);
-  if (mentorsBlockIndex == index)
-    ws.send(JSON.stringify({ type: 'mentor', index: index, data: 'false' }));
+  if (mentorsArray.includes(index)){
+    ws.send(JSON.stringify({ type: 'mentor', index: index, data: false }));
+  }
   else{
-    mentorsBlockIndex = index;
-    ws.send(JSON.stringify({ type: 'mentor', index: index, data: 'true' }));
+    mentorsArray.push(index);
+    ws.send(JSON.stringify({ type: 'mentor', index: index, data: true }));
   }
 }
   
@@ -44,11 +44,7 @@ function changeCode(wss, index, newCode) {
   });
 }
 
-function closeBlock(index, isMentor){
-  if(isMentor)
-    mentorsBlockIndex = -1;
-    wss.clients.forEach(client => {
-      client.send(JSON.stringify({ type: 'mentor', index: index, data: 'false' }));
-    });
-    console.log("mentor disconnected")
+function closeMentor(index){
+  mentorsArray = mentorsArray.filter(val => val !== index);
+  console.log("mentor disconnected")
 }
